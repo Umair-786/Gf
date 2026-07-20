@@ -82,6 +82,10 @@
     cursor: pointer;
     margin-top: 10px;
   }
+ #retryBtn {
+  display: block;
+  margin: 10px auto 0;
+ }
   button:hover { background: #2ea043; }
   button:disabled { background: #30363d; cursor: not-allowed; }
 </style>
@@ -100,40 +104,55 @@
     <div class="prompt">Enter your message: <input type="text" id="msgInput" placeholder="type here..." /></div>
     <button id="sendBtn">Send</button>
     <div id="log"></div>
+   <button id="retryBtn" style="display:none;">Retry</button>
   </div>
 </div>
 
 <script>
-  const input = document.getElementById('msgInput');
-  const btn = document.getElementById('sendBtn');
-  const log = document.getElementById('log');
+ const input = document.getElementById('msgInput');
+const btn = document.getElementById('sendBtn');
+const log = document.getElementById('log');
+const retryBtn = document.getElementById('retryBtn');
 
-  function addLine(text, cls, delay) {
-    setTimeout(() => {
-      const div = document.createElement('div');
-      div.className = 'line ' + (cls || '');
-      div.textContent = text;
-      log.appendChild(div);
-    }, delay);
-  }
+function addLine(text, cls, delay) {
+  setTimeout(() => {
+    const div = document.createElement('div');
+    div.className = 'line ' + (cls || '');
+    div.textContent = text;
+    log.appendChild(div);
+  }, delay);
+}
 
-  btn.addEventListener('click', () => {
-    const msg = input.value.trim();
-    if (!msg || btn.disabled) return;
+btn.addEventListener('click', () => {
+  const msg = input.value.trim();
+  if (!msg || btn.disabled) return;
 
-    btn.disabled = true;
-    input.disabled = true;
-    log.innerHTML = '';
+  btn.disabled = true;
+  input.disabled = true;
+  log.innerHTML = '';
 
-    addLine('Message Seen', 'seen', 600);
-    addLine('Gritika blocked you', 'blocked', 1400);
-    addLine('', '', 1800);
-    addLine('=== Code Execution Successful ===', 'success', 2000);
-  });
+  addLine('Message Seen', 'seen', 600);
+  addLine('Savita blocked you', 'blocked', 1400);
+  addLine('', '', 1800);
+  addLine('=== Better luck next time ===', 'success', 2000);
 
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') btn.click();
-  });
+  setTimeout(() => {
+    retryBtn.style.display = 'block';
+  }, 2200);
+});
+
+input.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') btn.click();
+});
+
+retryBtn.addEventListener('click', () => {
+  log.innerHTML = '';
+  input.value = '';
+  input.disabled = false;
+  btn.disabled = false;
+  retryBtn.style.display = 'none';
+  input.focus();
+});
 </script>
 
 </body>
